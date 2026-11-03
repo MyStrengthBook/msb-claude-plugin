@@ -1,16 +1,19 @@
 {
   "name": "msb",
   "displayName": "MyStrengthBook",
-  "version": "2.4.0",
+  "version": "3.0.2",
   "description": "Your coaching assistant for MyStrengthBook: it takes the routine work, the decisions stay yours. Coaches: review clients, spot plateaus, prepare check-ins and draft programs you approve in MSB.",
   "author": {
     "name": "My Strength Book"
   },
+  "license": "MIT",
   "keywords": [
     "coaching",
     "strength",
     "training",
     "nutrition",
     "mystrengthbook"
-  ]
+  ],
+  "icon": "./assets/msb.png",
+  "privacyPolicyUrl": "https://mystrengthbook.com/privacy-policy/"
 }

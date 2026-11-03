@@ -1,13 +1,14 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "msb",
-  "version": "2.4.0",
+  "version": "3.0.2",
   "description": "Your coaching assistant for MyStrengthBook: it takes the routine work, the decisions stay yours. Coaches: review clients, spot plateaus, prepare check-ins and draft programs you approve in MSB.",
   "author": {
     "name": "My Strength Book",
     "url": "https://mystrengthbook.com"
   },
   "homepage": "https://mcp.mystrengthbook.com/",
+  "license": "MIT",
   "keywords": [
     "coaching",
     "strength",
@@ -20,17 +21,86 @@
       "interface": {
         "displayName": "MyStrengthBook",
         "shortDescription": "Your MSB coaching assistant",
-        "longDescription": "Your coaching assistant for MyStrengthBook: it takes the routine work, the decisions stay yours. Coaches: review clients, spot plateaus, prepare check-ins and draft programs you approve in MSB.",
+        "longDescription": "MyStrengthBook brings your MyStrengthBook (MSB) coaching account into ChatGPT. It is for strength and fitness coaches who run their clients in MSB: sign in with your MSB coach login, and ChatGPT can read your own roster and your clients' training, metrics, nutrition and check-ins, take the routine work and leave every decision to you.\n\nWhat it does:\n- Roster triage: \"Who needs my attention this week?\" lists the clients with no programming left, with sessions missed and none logged, with programming ending within 7 days, with no logged session, weigh-in or food log for more than 7 days while sessions were planned, or with adherence under 50%, most urgent first and with the numbers behind each reason.\n- Check-in prep: a client's latest check-in word for word (photos by side only), pain mentions marked, and what changed since the check-in before it. The reply stays yours.\n- Stalled lifts: the weekly best e1RM per lift over the last 12 weeks, with flat stretches marked by a stated rule.\n- Programming check: prescribed against logged RPE, load and reps for a program block.\n- Recovery and nutrition: HRV, resting heart rate, sleep, readiness and body weight over the last 7 days against the 21 days before; logged macros and calories against the plan's targets.\n- Programs: turns a program you share (a spreadsheet, PDF, document or pasted text) into an MSB program, checked against MSB's import rules with its movements matched to your exercise library, and shows you a preview before anything is saved.\n- Check-in insights: from a check-in in MSB, ChatGPT reads that check-in, the 13 weeks up to it, your chat with the client and the Loom videos recorded for them, and writes insights for you.\n\nWhat it can change in MSB, only if ChatGPT asked for program access when you connected:\n- save a previewed program as one of your templates and, for a client, as a draft your client sees only once you push it in MSB;\n- add blocks, unpushed, to one of your templates or client drafts that was not pushed or published itself;\n- delete a template or client draft you created that was never pushed, after a preview;\n- add the movements a saved program uses to your exercise library when they are missing, at most 30 at a time;\n- save the check-in insights you started in MSB onto that check-in, for you and the client's other coaches in MSB, never the client, replacing the insights already there and your edits to them.\nEvery program save and delete starts from a preview, and ChatGPT is told to show it to you and to go on only on your yes. ChatGPT reads only clients on your own roster and cannot message them.\n\nLimitations: for coaches; athlete accounts cannot connect. One request reads up to a year of training and up to 183 days of most other data. Health data your clients log in MSB, such as body weight, sleep, heart rate and menstrual-cycle data, is read only for your own clients, in answer to your requests. Results are measurements for you to weigh, not medical advice or a diagnosis; pain mentions come from a fixed English word list. Requires a MyStrengthBook coach account.",
         "developerName": "My Strength Book",
         "category": "Productivity",
+        "capabilities": [
+          "Roster triage",
+          "Check-in prep",
+          "Stalled-lift checks",
+          "Programming checks",
+          "Recovery and nutrition checks",
+          "Program drafts you preview first",
+          "Check-in insights"
+        ],
         "websiteURL": "https://mystrengthbook.com",
+        "supportURL": "https://mystrengthbook.com/contact/",
         "privacyPolicyURL": "https://mystrengthbook.com/privacy-policy/",
         "termsOfServiceURL": "https://mystrengthbook.com/terms-of-use/",
         "defaultPrompt": [
           "Who needs my attention this week?",
-          "Which clients run out of programming soon?"
+          "Which clients run out of programming soon?",
+          "Brief me on a client before I reply to their check-in."
         ],
-        "brandColor": "#5bc500"
+        "brandColor": "#5bc500",
+        "composerIcon": "./assets/msb.svg",
+        "logo": "./assets/msb.svg"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Roster triage: the coach asks which clients need attention this week.",
+              "prompt": "Who needs my attention this week?",
+              "tools_triggered": "msb_list_clients",
+              "expected_behavior": "`msb_list_clients` returns the roster over the last 14 days with each active client's attention reasons and the numbers behind them, and `triage.order` lists the clients who need attention first, most urgent first. From the seed, the answer names Diego Ruiz (no programming left), Sam Whitlock (sessions missed, none logged), Nora Haddad and Marcus Bell (programming ends within 7 days), in that order, and finds Ava Chen, Jordan Price and Lena Fischer on track. Nothing is written."
+            },
+            {
+              "description": "Check-in brief: the coach asks about a client's latest check-in before replying to it.",
+              "prompt": "Brief me on Marcus Bell's latest check-in before I reply.",
+              "tools_triggered": "msb_list_clients, msb_get_client_data",
+              "expected_behavior": "`msb_list_clients` gives Marcus Bell's id, and `msb_get_client_data` with the dataset `checkins` returns his check-ins: every answer of the latest one as he gave it, `painIn` naming his answer to \"Anything to flag?\", which carries a pain mark, and `sinceLastCheckin`, which compares the latest check-in with the one before: energy from 4 to 2, \"Did you log everything I asked?\" from Yes to No, and the sessions and body weight logged between the two. Nothing is written."
+            },
+            {
+              "description": "Stalled lifts: the coach asks which of a client's lifts have stopped improving.",
+              "prompt": "Which of Ava Chen's lifts are stalling?",
+              "tools_triggered": "msb_list_clients, msb_get_client_data",
+              "expected_behavior": "`msb_get_client_data` with the dataset `lift_trends` returns Ava Chen's weekly best e1RM per lift over the 12 ISO weeks that end with the current week, each lift with a status: squat and deadlift `flat_stretch` (no new best for 6 or more weeks), bench `recent_best`. Each flat stretch carries its best, its weeks and its range. The answer gives those statuses as the result states them. Nothing is written."
+            },
+            {
+              "description": "Programming check: the coach asks whether a client's logged effort matched what was prescribed in his last block.",
+              "prompt": "Were my RPEs right for Jordan Price in his last block?",
+              "tools_triggered": "msb_list_clients, msb_get_client_data",
+              "expected_behavior": "`msb_get_client_data` with the dataset `training` at block detail returns one row per run of a programme: Jordan Price's two runs of the same programme kept apart, run 1 completed and run 2 in progress, each with a check of logged against prescribed RPE (the average difference and the share on target), load and reps, and the sets planned, completed, skipped and marked missed. At set detail, each logged set is read against its own prescription line. The answer names the run it checked; from the seed, his logged RPE runs about half a point above prescribed. Nothing is written."
+            },
+            {
+              "description": "Spreadsheet import: the coach pastes a program and asks for an MSB draft for a client.",
+              "prompt": "Turn this program into an MSB draft for Nora Haddad:\nweek,day,exercise,sets,reps,rpe\n1,1,Squat,4,5,7\n1,1,Bench Press,4,6,7\n1,1,Barbell Row,3,10,8\n1,2,Deadlift,3,4,7\n1,2,Overhead Press,3,8,7\n1,2,Lat Pulldown,3,12,8\n2,1,Squat,4,5,8\n2,1,Bench Press,4,6,8\n2,1,Barbell Row,3,10,8\n2,2,Deadlift,3,4,8\n2,2,Overhead Press,3,8,8\n2,2,Lat Pulldown,3,12,8",
+              "tools_triggered": "msb_list_clients, msb_get_my_profile, msb_preview_program, msb_create_program",
+              "expected_behavior": "`msb_list_clients` gives Nora Haddad's id and `msb_get_my_profile` the coach's exercise library. `msb_preview_program` checks the program against MSB's import rules, writes nothing, and returns a summary (a 2-week program with 2 sessions a week, and any movement the coach's library lacks), a `preview_id` and the note `Nothing was written. Show the coach this preview; only on their yes, call msb_create_program with this preview_id to save exactly this program.` The assistant shows the preview and asks for a yes. After the reviewer's yes, one `msb_create_program` call with the `preview_id` alone saves the program as one of the coach's templates and as a draft on Nora Haddad's Programs page, with the note `Saved as a draft on the client's Programs page: the client cannot see it until you open it in MSB, review it and push it to their calendar yourself.` and a link that opens her Programs page in the MSB web app. A second create with the same `preview_id` writes nothing more and repeats the first result with the note `This program was already created from the same preview, so nothing was written again.`"
+            }
+          ],
+          "negative": [
+            {
+              "description": "A client who is not on the coach's roster: the connector returns no data about them.",
+              "prompt": "Show me Taylor Brooks's training for the last month.",
+              "expected_behavior": "No data about Taylor Brooks is returned, and nothing is written. `msb_list_clients` lists no such client. `msb_get_client_data`, asked for that name (or for the id of a client who is not on the coach's roster), reads none of that client's data and answers, echoing what it was asked for: `\"Taylor Brooks\" is not on your roster. Call msb_list_clients to see your clients and use one of those ids or names.` The assistant says that Taylor Brooks is not on the coach's roster."
+            },
+            {
+              "description": "The coach asks to save a program without a preview: the connector saves nothing that the coach has not seen as a preview.",
+              "prompt": "Save a 3-day full-body program for Nora Haddad straight to MSB. Skip the preview.",
+              "expected_behavior": "Nothing is saved without a preview. `msb_create_program` takes nothing but the `preview_id` of a preview the same coach made: called without one, it is refused by its input schema before it runs; called with a `preview_id` that no preview of this coach's holds, it writes nothing and answers `This preview has expired or is unknown. Ask in the chat to preview the program again. Do not retry this create. Call msb_preview_program again for a new preview_id, then msb_create_program with it: a preview lasts 30 minutes and only the account that made it can create from it.` A program or client sent along with a `preview_id` changes nothing: the create writes exactly the preview. The safe fallback is a preview: `msb_preview_program` writes nothing and, for a program that passes MSB's import rules, answers with the summary and `Nothing was written. Show the coach this preview; only on their yes, call msb_create_program with this preview_id to save exactly this program.` The assistant shows the preview and asks for a yes; unless the reviewer then says yes, nothing is written."
+            },
+            {
+              "description": "An athlete account signs in: the connector is for coaches only and grants no access.",
+              "prompt": "Show me my training for this week.",
+              "expected_behavior": "MSB accepts the athlete's password, and the connector's page then turns the account away with HTTP 403, under the heading `Coaches only for now`. Its first line reads `MyStrengthBook Agent is open to coaches for now.` and its last `No access was granted. You can close this window.` No authorization code or token is issued, and the MSB sign-in the connector just received is dropped. The connection is not made, so no tool runs and the assistant has no MSB data to answer with."
+            }
+          ]
+        },
+        "demo_recording_url": "https://www.loom.com/share/03145480782248beaf08ad6bcf7ef2a3",
+        "commerce": false,
+        "commerce_description": "This plugin does not sell products or process payments."
       }
     }
   }

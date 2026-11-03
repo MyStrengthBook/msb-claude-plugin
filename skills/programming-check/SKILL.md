@@ -1,6 +1,6 @@
 ---
 name: programming-check
-description: "Did the last block work? For one client's programme block (the last one unless the coach names another by programme name or a date), read from 6 months of blocks: prescribed against logged RPE, load and reps, the e1RM change per lift across the block and the accessory sets skipped, with set quotes from the block's last 14 days and the client's check-ins, then a 3 to 5 sentence block verdict to weigh that names the facts for and against it. The verdict is a starting point: the coach's judgment decides."
+description: "Did the last block work? For one client's programme block (the last one unless the coach names another by programme name or a date): prescribed against logged RPE, load and reps, the e1RM change per lift across the block and the accessory sets skipped, with set quotes from the block's last 14 days and the client's check-ins, then a 3 to 5 sentence block verdict to weigh that names the facts for and against it. The verdict is a starting point: the coach's judgment decides."
 ---
 `<client>` below is the client the coach named when invoking this skill or in their message; `<block>` is any further text they gave after the client name, otherwise "the last block".
 If no client is named, ask which client before calling any tool.
