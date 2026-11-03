@@ -1,0 +1,37 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "msb",
+  "version": "2.4.0",
+  "description": "Your coaching assistant for MyStrengthBook: it takes the routine work, the decisions stay yours. Coaches: review clients, spot plateaus, prepare check-ins and draft programs you approve in MSB.",
+  "author": {
+    "name": "My Strength Book",
+    "url": "https://mystrengthbook.com"
+  },
+  "homepage": "https://mcp.mystrengthbook.com/",
+  "keywords": [
+    "coaching",
+    "strength",
+    "training",
+    "nutrition",
+    "mystrengthbook"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "MyStrengthBook",
+        "shortDescription": "Your MSB coaching assistant",
+        "longDescription": "Your coaching assistant for MyStrengthBook: it takes the routine work, the decisions stay yours. Coaches: review clients, spot plateaus, prepare check-ins and draft programs you approve in MSB.",
+        "developerName": "My Strength Book",
+        "category": "Productivity",
+        "websiteURL": "https://mystrengthbook.com",
+        "privacyPolicyURL": "https://mystrengthbook.com/privacy-policy/",
+        "termsOfServiceURL": "https://mystrengthbook.com/terms-of-use/",
+        "defaultPrompt": [
+          "Who needs my attention this week?",
+          "Which clients run out of programming soon?"
+        ],
+        "brandColor": "#5bc500"
+      }
+    }
+  }
+}
