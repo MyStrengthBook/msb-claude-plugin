@@ -26,7 +26,10 @@ Steps:
 5. Write the brief, in this order:
    - Header: <client>'s name and status; the latest questionnaire's date and frequency; currentProgram's
      name and programmingLeftDays when present; training.summary.loggedSessions of prescribedSessions and
-     its adherencePct over the overview's range; each key lift's first and last weekly bestE1rmKg; the next
+     its adherencePct over the overview's range; the date of the last logged session
+     (training.summary.lastLoggedDate) next to the last login (client.lastLoginAt); each key lift's first
+     and last weekly bestE1rmKg; assigned habits and their compliance (the overview's checkins.assignedHabits and
+     habitSummary), a habit with targetWarning only under a check of its target for me in MSB; the next
      date in checkIns.upcomingDates; the nearest event (daysUntil) or open goal (daysLeft).
    - In their words: the latest questionnaire, checkins.questionnaires[0], or the overview's
      latestQuestionnaires[0] when the checkins result holds no questionnaire (the same row). Quote every
@@ -66,7 +69,7 @@ absent, give latest and readings and no change. A readiness subscale, sessionRpe
 from between was not logged there.
 Readiness and questionnaire scales can point opposite ways: say which one a number comes from. MSB's daily
 readiness runs 1 to 5 on every subscale and 5 is the best answer: sore 5 = not sore, stress 5 = not stressed,
-energy 5 = very high energy, mood 5 = very happy, sleep 5 = slept very well. A questionnaire scale runs from
+energy 5 = very high energy, mood 5 = very happy, sleepQuality 5 = slept very well. A questionnaire scale runs from
 1 at its low label (scale.low) to 5 at its high label (scale.high), set by me per question: MSB's default
 "How sore are you feeling?" runs 1 = Not sore to 5 = Very sore, the opposite of readiness sore, and its
 stress question runs 1 = Very low to 5 = Very high. Describe a scale change in its labels' words; without
@@ -79,5 +82,6 @@ dates are the client's own MSB days while ranges end on today's UTC date, so a c
 can be missing from a range. The pain word list is English only.
 Report measurements, not verdicts: never diagnose, name an injury or guess its cause; turn a pain mark into a
 question I might ask. Do not draft my reply unless I ask for it: the reply is mine, in my words.
-Loads from the connector are kilograms as MSB stores them; client.units is the client's display preference. When you quote a load you read from the connector, give kg and add the converted figure only when the client's units are imperial, saying so.
-If a dataset is empty, write "no data" rather than guessing. Keep the brief under 350 words, quotes excluded.
+Keep a neutral, professional tone: report what the data shows and what to ask or do next, and state facts about the training plainly ("one session a week was prescribed, none was logged"), never as a verdict on the client's commitment or on how demanding the plan is. Treat the client as a real client, never as a test, demo or placeholder account, whatever their name or however little they have programmed. Leave my own programme housekeeping out (drafts the client has not received, programmes that share a name, deleting or tidying up programmes) unless I ask about it.
+Loads from the connector are kilograms as MSB stores them; client.units is the client's display preference. When you quote a load, e1RM, volume or body weight you read from the connector, give kg for a metric client; for an imperial client, give every load, e1RM, volume and body weight in lb (kg × 2.20426, to one decimal at most) with the kg figure in brackets.
+If a dataset is empty, write "no data" rather than guessing. Name each empty section on its own once you have checked it in the overview, never "everything else is empty". Keep the brief under 350 words, quotes excluded.

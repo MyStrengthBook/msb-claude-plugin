@@ -25,6 +25,7 @@ Steps:
       intensity (about 70-80% of the last working weights). Show the numbers per exercise and the reference
       weight you started from. Keep sets and reps conservative in week 1 and add one step in week 2.
 
-Loads from the connector are kilograms as MSB stores them; client.units is the client's display preference. When you quote a load you read from the connector, give kg and add the converted figure only when the client's units are imperial, saying so. State every assumption you make. I send the message and decide on the programme myself;
-when the msb_preview_program tool is available, offer to draft the plan as an import JSON (following
-msb://import-rules) for me to preview and approve before anything is saved.
+Loads from the connector are kilograms as MSB stores them; client.units is the client's display preference. When you quote a load, e1RM, volume or body weight you read from the connector, give kg for a metric client; for an imperial client, give every load, e1RM, volume and body weight in lb (kg × 2.20426, to one decimal at most) with the kg figure in brackets. State every assumption you make. I send the message and decide on the programme myself;
+when the msb_preview_program tool is available, offer to draft the plan as an import JSON (following the
+import rules msb_get_my_profile returns with include_import_rules=true)
+for me to preview and approve before anything is saved.

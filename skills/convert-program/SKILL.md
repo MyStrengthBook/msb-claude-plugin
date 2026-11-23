@@ -12,9 +12,10 @@ If msb_preview_program is not among your tools, this MSB connection can only rea
 reconnect MSB and allow program drafts, and stop.
 
 Steps:
-1. Read the msb://import-rules resource FIRST: the format (structure, exercise and sets rules), the
+1. Read the import rules FIRST: call msb_get_my_profile with include_import_rules=true (the same
+   text as the msb://import-rules resource): the format (structure, exercise and sets rules), the
    workout-notes and athlete's-choice conventions and the Excel date trap. Self-check every JSON you
-   write against it before calling the tool.
+   write against them before calling the tool.
 2. Read <file> completely, whatever its form: xlsx, csv, PDF, docs or pasted text. In a
    spreadsheet, read every tab and every side-by-side column group. Tabs named Week 1, Week 2… are
    usually weeks of ONE block; tabs that are versions or variants of a full program are separate
@@ -39,7 +40,10 @@ Steps:
    notes; workout-level notes go in the session's notes, never an exercise;
    never drop coaching information silently: anything that does not fit goes into the closest notes
    field. Set program.loadUnit to the unit the loads are given in ("lb" for pounds) and
-   never convert loads yourself.
+   never convert loads yourself. Write the sets as item 9 of the rules' connector section does
+   (circuits and rounds, timed pieces, intervals, tiers, rep lists, ranges of sets, per side,
+   warm-ups, cluster sets), so the same file always gives the same sets, and count each session's
+   sets in <file> with those rules.
 5. Call msb_preview_program with program set to the import JSON and:
    - source set to the file name (or "pasted text" when I pasted it);
    - spellingFixes set to one {from, to} pair per movement you renamed in step 3 (from = the name as
@@ -49,16 +53,18 @@ Steps:
    - otherwise athleteId set to the named client's id from msb_list_clients when the program is for a
      specific client; leave it out for a coach template.
    A preview writes nothing. If errors come back, read every one, fix the JSON and preview again.
-   Never hide or shorten an error.
+   Never hide or shorten an error. Then compare every session in setCounts with your count from
+   <file>: a session that differs lost or gained sets in the JSON, so fix it and preview again.
 6. Show me the preview in full: the program name and description (when the result carries
    appendedTo, the program the blocks go to instead: appendedTo.name, whether it is my template or a
    client's draft, and its existing block count, since it keeps its own name and description), each
-   block with its weeks and sessions per week, exercise counts, supersets, EVERY new library movement
-   (libraryAdditions), every library fill and every spelling you fixed. For a client draft, name every
-   lift in clientMaxesMissing: the client has no 1RM for it, so its fixed loads went into the exercise
-   notes; tell me to set that 1RM in MSB before I create to keep those loads, otherwise I must enter
-   them by hand. Then ask for my go.
-7. Only when I say go: call msb_create_program with only the preview_id from that clean preview,
+   block with its weeks and sessions per week, exercise counts and sets (from setCounts, never a
+   count of your own), supersets, EVERY new library movement (libraryAdditions), every library fill
+   and every spelling you fixed. Name every warning in warnings where you first say how the preview
+   went: a preview with warnings passed with them, not cleanly. For a client draft, name every lift in clientMaxesMissing: the client
+   has no 1RM for it, so its fixed loads went into the exercise notes; tell me to set that 1RM in MSB
+   before I create to keep those loads, otherwise I must enter them by hand. Then ask for my go.
+7. Only when I say go: call msb_create_program with only the preview_id from the preview I approved,
    so the exact previewed program is created (or its blocks added to that program) and nothing else is
    sent. If I ask for changes instead, fix the JSON and preview again; only the new preview_id may be
    created. Report the cycleId and the link, and remind me the draft is invisible to the client until

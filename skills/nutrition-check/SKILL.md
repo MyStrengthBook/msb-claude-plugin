@@ -10,13 +10,14 @@ How is <client> eating? Give me a nutrition check.
 Steps:
 1. Call msb_list_clients with include_inactive=true and include_activity=false to get <client>'s id and
    status.
-2. Call msb_get_client_data with dataset=nutrition and the default range, the last 28 days ending today, so
-   the table and the summary describe the same days.
+2. Call msb_get_client_data with dataset=nutrition and its default range (the nutrition window the tool
+   description names, ending today), so the table and the summary describe the same days.
 3. Report, in this order:
    - a table of the last 7 logged days in date order, one row per day: date, day type (dayType, training or
      rest), calories, target calories (targetCalories), day adherence % (adherencePct), then protein, carbs
      and fat in grams. A logged day is a row of nutrition.days that has a dayType; when fewer than 7 days
-     were logged, show the ones there are and say how many;
+     were logged, show the ones there are and say how many. Mark as a possible copy a row whose date is in a
+     summary.identicalDays group's dates or is a summary.mealsMatchingDayTotals row's date;
    - logging: summary.daysLogged of summary.daysInRange days (summary.loggingPct %) and the last logged
      date, summary.lastLoggedDate;
    - intake: summary.avgCalories, avgProteins, avgCarbs and avgFats next to each plan in nutrition.plans
@@ -24,7 +25,13 @@ Steps:
      mix training and rest days; the targets line compares each day with its own target;
    - targets: summary.targets.daysOnTarget of summary.targets.daysWithTarget scored days on target,
      summary.targets.dayAdherencePct, and summary.adherenceToPlanPct (calories eaten over target calories
-     on those same days).
+     on those same days);
+   - possible copied entries, when the summary has them: each summary.identicalDays group (its dates, all
+     logged with exactly the same protein, carbs and fat) and each summary.mealsMatchingDayTotals row (the
+     date, and the matchesDays whose whole-day total one of its meals repeats exactly), with their grams.
+     Call them possible duplicate or placeholder logs (or the same menu eaten again) for me to confirm with
+     the client, never what the client ate for certain, and say the averages and adherence above still
+     include those days.
 
 Calories are calculated by the connector from the logged macros (4 kcal per gram of protein and carbs, 9 per
 gram of fat) because MSB stores no calorie total: say so once. The calories come from the unrounded grams, so
@@ -37,7 +44,7 @@ target (no plan covers it, or its plan sets no calories or macros): write "no pl
 target. On a logged day, a protein, carbs or fat value missing from the row counts as 0 g, as it does in the
 averages. A day with targetCalories but no adherencePct has a target MSB cannot score: write "not scored".
 When summary.targets is absent, no nutrition plan covers the range: say so plainly. When
-summary.daysLogged is 0, say plainly that no macros were logged in the last 28 days, name any dates that
+summary.daysLogged is 0, say plainly that no macros were logged in that window, name any dates that
 have meals only, and stop. When days were logged but summary.targets.daysWithTarget is 0, no logged day
 could be scored: say so, and leave day adherence and adherence to plan out rather than writing 0 of 0.
 A date missing from nutrition.days was not logged, and a row with mealsLogged but no dayType had meals logged

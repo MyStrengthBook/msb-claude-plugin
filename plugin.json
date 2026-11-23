@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "msb",
-  "version": "3.0.2",
+  "version": "3.1.3",
   "description": "Your coaching assistant for MyStrengthBook: it takes the routine work, the decisions stay yours. Coaches: review clients, spot plateaus, prepare check-ins and draft programs you approve in MSB.",
   "author": {
     "name": "My Strength Book",
@@ -23,7 +23,7 @@
         "shortDescription": "Your MSB coaching assistant",
         "longDescription": "MyStrengthBook brings your MyStrengthBook (MSB) coaching account into ChatGPT. It is for strength and fitness coaches who run their clients in MSB: sign in with your MSB coach login, and ChatGPT can read your own roster and your clients' training, metrics, nutrition and check-ins, take the routine work and leave every decision to you.\n\nWhat it does:\n- Roster triage: \"Who needs my attention this week?\" lists the clients with no programming left, with sessions missed and none logged, with programming ending within 7 days, with no logged session, weigh-in or food log for more than 7 days while sessions were planned, or with adherence under 50%, most urgent first and with the numbers behind each reason.\n- Check-in prep: a client's latest check-in word for word (photos by side only), pain mentions marked, and what changed since the check-in before it. The reply stays yours.\n- Stalled lifts: the weekly best e1RM per lift over the last 12 weeks, with flat stretches marked by a stated rule.\n- Programming check: prescribed against logged RPE, load and reps for a program block.\n- Recovery and nutrition: HRV, resting heart rate, sleep, readiness and body weight over the last 7 days against the 21 days before; logged macros and calories against the plan's targets.\n- Programs: turns a program you share (a spreadsheet, PDF, document or pasted text) into an MSB program, checked against MSB's import rules with its movements matched to your exercise library, and shows you a preview before anything is saved.\n- Check-in insights: from a check-in in MSB, ChatGPT reads that check-in, the 13 weeks up to it, your chat with the client and the Loom videos recorded for them, and writes insights for you.\n\nWhat it can change in MSB, only if ChatGPT asked for program access when you connected:\n- save a previewed program as one of your templates and, for a client, as a draft your client sees only once you push it in MSB;\n- add blocks, unpushed, to one of your templates or client drafts that was not pushed or published itself;\n- delete a template or client draft you created that was never pushed, after a preview;\n- add the movements a saved program uses to your exercise library when they are missing, at most 30 at a time;\n- save the check-in insights you started in MSB onto that check-in, for you and the client's other coaches in MSB, never the client, replacing the insights already there and your edits to them.\nEvery program save and delete starts from a preview, and ChatGPT is told to show it to you and to go on only on your yes. ChatGPT reads only clients on your own roster and cannot message them.\n\nLimitations: for coaches; athlete accounts cannot connect. One request reads up to a year of training and up to 183 days of most other data. Health data your clients log in MSB, such as body weight, sleep, heart rate and menstrual-cycle data, is read only for your own clients, in answer to your requests. Results are measurements for you to weigh, not medical advice or a diagnosis; pain mentions come from a fixed English word list. Requires a MyStrengthBook coach account.",
         "developerName": "My Strength Book",
-        "category": "Productivity",
+        "category": "Healthcare",
         "capabilities": [
           "Roster triage",
           "Check-in prep",
@@ -43,8 +43,8 @@
           "Brief me on a client before I reply to their check-in."
         ],
         "brandColor": "#5bc500",
-        "composerIcon": "./assets/msb.svg",
-        "logo": "./assets/msb.svg"
+        "composerIcon": "./assets/msb.png",
+        "logo": "./assets/msb.png"
       },
       "review": {
         "test_cases": {

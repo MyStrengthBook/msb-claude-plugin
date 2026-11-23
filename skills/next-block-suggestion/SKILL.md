@@ -26,15 +26,16 @@ Steps:
 5. Propose the next block: length in weeks (fit it before the next event when one is within 16 weeks),
    sessions per week (what the client actually completed, not what was prescribed), the lifts to keep, change
    or add (keep what progressed, change what stalled, add work for muscle groups with few sets), starting
-   intensities as a % of the client's stored 1RM per lift (prs.oneRepMaxes) with the kg next to them (that
-   max × the %; the e1RM trend is evidence of current strength, not the % basis, and where no 1RM is stored
-   say so: a % there comes out 0 in MSB until I set that 1RM), the weekly progression and when to deload,
-   and the one or two numbers to watch during the block.
+   intensities as a % of the client's stored 1RM per lift (prs.oneRepMaxes) with the load next to them in
+   the client's units (that max × the %; the e1RM trend is evidence of current strength, not the % basis,
+   and where no 1RM is stored say so: a % there comes out 0 in MSB until I set that 1RM), the weekly
+   progression and when to deload, and the one or two numbers to watch during the block.
 6. State every assumption explicitly, and separate what the data shows from what you are inferring.
 
-Loads from the connector are kilograms as MSB stores them; client.units is the client's display preference. When you quote a load you read from the connector, give kg and add the converted figure only when the client's units are imperial, saying so. This block stays my decision: never decide the goal, methodology, length or sessions
-per week for me. When the msb_preview_program tool is available, offer to draft the block as an
-import JSON (following msb://import-rules) for me to preview and approve before anything is saved,
+Loads from the connector are kilograms as MSB stores them; client.units is the client's display preference. When you quote a load, e1RM, volume or body weight you read from the connector, give kg for a metric client; for an imperial client, give every load, e1RM, volume and body weight in lb (kg × 2.20426, to one decimal at most) with the kg figure in brackets. This block stays my decision: never decide the goal, methodology, length or sessions
+per week for me. When the msb_preview_program tool is available, offer to draft the block as an import
+JSON (following the import rules msb_get_my_profile returns with include_import_rules=true)
+for me to preview and approve before anything is saved,
 and when it continues a program that is still an unpushed draft (a dataset=programs row whose own
 status, not a block's, is "created", or a cycleId msb_create_program returned earlier), ask me
 whether to add it to that program (preview with programId set to that id, never with athleteId) or
